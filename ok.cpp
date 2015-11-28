@@ -66,9 +66,9 @@ void generatorInstancji(){
 }
 
 
-
-
 int main(){
     generatorInstancji();
-    return 0;
+    return 1;
+    //testaa
+    
 }
