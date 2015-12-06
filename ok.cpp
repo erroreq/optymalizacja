@@ -3,6 +3,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -93,69 +94,78 @@ void testInstancji(){
 
 void generatorLosowych(){
     int tabZadan[50][2];
-    for (int i=0; i<50; i++){
-        tabZadan[i][0]=i;
-        tabZadan[i][1]=i;
-    }
-    int tmp, tmp1, tmp2;
-    for (int i=0; i<50; i++){
-        tmp1=rand()%50;
-        tmp2=rand()%50;
-        tmp = tabZadan[tmp1][0];
-        tabZadan[tmp1][0]=tabZadan[tmp2][0];
-        tabZadan[tmp2][0]=tmp;
+    for (int k=0; k<50; k++){
+        for (int i=0; i<50; i++){
+            tabZadan[i][0]=i;
+            tabZadan[i][1]=i;
+        }
+        int tmp, tmp1, tmp2;
+        for (int i=0; i<50; i++){
+            tmp1=rand()%50;
+            tmp2=rand()%50;
+            tmp = tabZadan[tmp1][0];
+            tabZadan[tmp1][0]=tabZadan[tmp2][0];
+            tabZadan[tmp2][0]=tmp;
+            
+            tmp1=rand()%50;
+            tmp2=rand()%50;
+            tmp = tabZadan[tmp1][1];
+            tabZadan[tmp1][1]=tabZadan[tmp2][1];
+            tabZadan[tmp2][1]=tmp;
+        }
+        /* //SPRAWDZANIE SUM
+        int sum1, sum2;
+        sum1=sum2=0;
+        for (int i=0; i<50; i++){
+            printf("%d\t%d\n", tabZadan[i][0],tabZadan[i][1]);
+            sum1+=tabZadan[i][0];
+            sum2+=tabZadan[i][1];
+        }
+        printf("%d\t%d\n", sum1, sum2);*/
         
-        tmp1=rand()%50;
-        tmp2=rand()%50;
-        tmp = tabZadan[tmp1][1];
-        tabZadan[tmp1][1]=tabZadan[tmp2][1];
-        tabZadan[tmp2][1]=tmp;
-    }
-    /* //SPRAWDZANIE SUM
-    int sum1, sum2;
-    sum1=sum2=0;
-    for (int i=0; i<50; i++){
-        printf("%d\t%d\n", tabZadan[i][0],tabZadan[i][1]);
-        sum1+=tabZadan[i][0];
-        sum2+=tabZadan[i][1];
-    }
-    printf("%d\t%d\n", sum1, sum2);*/
-    int wskaznik = 0, dlugosc, ktoreZadanie;
-    for (int i=0; i<50; i++){
-        dlugosc = 0;
-        ktoreZadanie = tabZadan[i][0];
-        dlugosc = zadania[ktoreZadanie][0];
-        //printf("%d ",ktoreZadanie);
-        //printf("%d\t",dlugosc);
-        int test = 0;
-        while (!test){
-            int czyWolne = 1;
-            for (int j=wskaznik; j<wskaznik+dlugosc; j++){
-                if (instancja[0][j] == -1){
-                    czyWolne = 0;
-                    //printf("AAAAAAAAAAAA");
+        int wskaznik = 0, dlugosc, ktoreZadanie;
+        for (int i=0; i<50; i++){
+            dlugosc = 0;
+            ktoreZadanie = tabZadan[i][0];
+            dlugosc = zadania[ktoreZadanie][0];
+            //printf("%d ",ktoreZadanie);
+            //printf("%d\t",dlugosc);
+            int test = 0;
+            while (!test){
+                int czyWolne = 1;
+                for (int j=wskaznik; j<wskaznik+dlugosc; j++){
+                    if (instancja[0][j] != -10){
+                        czyWolne = 0;
+                        //printf("AAAAAAAAAAAA");
+                    }
                 }
-            }
-            if (czyWolne){
-                for (int j = wskaznik; j<wskaznik+dlugosc; j++){
-                    rozwiazania1[0][j] = ktoreZadanie;
+                if (czyWolne){
+                    for (int j = wskaznik; j<wskaznik+dlugosc; j++){
+                        rozwiazania1[k][j] = ktoreZadanie;
+                    }
+                    test=1;
+                    //printf("%d\t", i);
+                    wskaznik+=dlugosc;
                 }
-                test=1;
-                //printf("%d\t", i);
-                wskaznik+=dlugosc;
-            }
-            else{
-                wskaznik++;
+                else{
+                    wskaznik++;
+                }
             }
         }
+    }
         
-    }
+        
+        
     int suma = 0;
-    for (int i=0; i<999; i++){
-        if (rozwiazania1[0][i]>=0 && (rozwiazania1[0][i]!=rozwiazania1[0][i+1]))
-            suma+= rozwiazania1[0][i];
+    for(int k=0; k<50; k++){
+        for (int i=0; i<999; i++){
+            if (rozwiazania1[k][i]>=0 && (rozwiazania1[k][i]!=rozwiazania1[k][i+1]))
+                suma+= rozwiazania1[k][i];
+        }
+        printf("%d\n",suma);
+        suma=0;
     }
-    printf("%d\n",suma);
+    
     suma=0;
     for (int i=0; i<50;i++){
         suma+=i;
@@ -168,7 +178,6 @@ void generatorLosowych(){
 int main(){
     generatorInstancji();
     generatorLosowych();
-    
     
     
     
